@@ -333,4 +333,10 @@ spanning-tree mode rapid-pvst
 spanning-tree vlan 10,20,30,40,50,60,99,100 root primary
 ```
 
+### STP nos restantes SW
+
+```
+spanning-tree mode rapid-pvst
+```
+
 ---
