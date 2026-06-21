@@ -235,6 +235,7 @@ interface (Porta)
  switchport trunk allowed vlan 10,20,30,40,50,60,99,100
 exit
 ```
+---
 
 ### L3 Conections
 
@@ -255,6 +256,7 @@ interface GigabitEthernet1/0/5
 exit
 
 ```
+---
 
 ### Router 1
 ```
@@ -276,6 +278,8 @@ interface Serial0/2/0
  no shutdown
 exit
 ```
+
+---
 
 ### Portas Access nos end devices de cada AC SW
 Exemplo para o AC SW URGENCIAS
@@ -299,7 +303,6 @@ interface fa0/X
 exit
 
 ```
-
 ---
 
 ### DIA 3
