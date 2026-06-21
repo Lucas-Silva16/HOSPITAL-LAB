@@ -301,3 +301,33 @@ exit
 ```
 
 ---
+
+### DIA 3
+
+## EtherChannel
+
+```
+interface range GigabitEthernet1/0/1 - 2
+ channel-group 1 mode active
+ no shutdown
+exit
+
+interface Port-Channel1
+ switchport mode trunk
+ switchport trunk native vlan 99
+ switchport trunk allowed vlan 10,20,30,40,50,60,99,100
+exit
+
+end
+write memory
+```
+---
+
+### STP EM AMBOS OS CORE SW
+
+```
+spanning-tree mode rapid-pvst
+spanning-tree vlan 10,20,30,40,50,60,99,100 root primary
+```
+
+---
