@@ -1,5 +1,6 @@
-# HOSPITAL-LAB  || Packet Tracer
+![Cisco Packet Tracer](https://img.shields.io/badge/Cisco_Packet_Tracer-Network_Simulation-1BA0D7?style=for-the-badge&logo=cisco)
 
+# HOSPITAL-LAB 
 ### Tabela de VLANs
 
 | VLAN | NOME | HOST NECESSÁRIOS | HOST ÚTEIS | PREFIXO | REDE | MÁSCARA | GATEWAY | BROADCAST |
@@ -326,27 +327,22 @@ write memory
 ```
 ---
 
-### STP EM AMBOS OS CORE SW
+### PVST EM AMBOS OS CORE SW
 
 ```
 spanning-tree mode rapid-pvst
 spanning-tree vlan 10,20,30,40,50,60,99,100 root primary
 ```
 
-### STP nos restantes SW
+### PVST nos restantes SW
 
 ```
 spanning-tree mode rapid-pvst
 ```
 
+---
 
-
-
-
-
-
-
-
+## DIA 4
 
 
 
