@@ -339,4 +339,209 @@ spanning-tree vlan 10,20,30,40,50,60,99,100 root primary
 spanning-tree mode rapid-pvst
 ```
 
+
+
+
+
+
+
+
+
+
+
+
+### SVIS CORE-SW-A // CORE-SW-B
+#### Para o CORE-SW-B o ip address muda de .2 para .3, segue a mesma configuracao
+```
+configure terminal
+
+ip routing
+
+interface vlan 10
+ ip address 192.168.10.2 255.255.255.192
+ no shutdown
+exit
+
+interface vlan 20
+ ip address 192.168.20.2 255.255.255.192
+ no shutdown
+exit
+
+interface vlan 30
+ ip address 192.168.30.2 255.255.255.224
+ no shutdown
+exit
+
+interface vlan 40
+ ip address 192.168.40.2 255.255.255.240
+ no shutdown
+exit
+
+interface vlan 50
+ ip address 192.168.50.2 255.255.255.192
+ no shutdown
+exit
+
+interface vlan 60
+ ip address 192.168.60.2 255.255.255.224
+ no shutdown
+exit
+
+```
+ ### APENAS PARA O CORE-SW-A!
+```
+interface vlan 99                               
+ ip address 192.168.99.2 255.255.255.252
+ no shutdown
+exit
+```
+```
+interface vlan 100
+ ip address 192.168.100.2 255.255.255.248
+ no shutdown
+exit
+
+end
+write memory
+```
+---
+
+### CORE-SW-A (priority 110 — active):
+```
+configure terminal
+
+ip routing
+
+interface vlan 10
+ ip address 192.168.10.2 255.255.255.192
+ standby 1 ip 192.168.10.1
+ standby 1 priority 110
+ standby 1 preempt
+ no shutdown
+exit
+
+interface vlan 20
+ ip address 192.168.20.2 255.255.255.192
+ standby 1 ip 192.168.20.1
+ standby 1 priority 110
+ standby 1 preempt
+ no shutdown
+exit
+
+interface vlan 30
+ ip address 192.168.30.2 255.255.255.224
+ standby 1 ip 192.168.30.1
+ standby 1 priority 110
+ standby 1 preempt
+ no shutdown
+exit
+
+interface vlan 40
+ ip address 192.168.40.2 255.255.255.240
+ standby 1 ip 192.168.40.1
+ standby 1 priority 110
+ standby 1 preempt
+ no shutdown
+exit
+
+interface vlan 50
+ ip address 192.168.50.2 255.255.255.192
+ standby 1 ip 192.168.50.1
+ standby 1 priority 110
+ standby 1 preempt
+ no shutdown
+exit
+
+interface vlan 60
+ ip address 192.168.60.2 255.255.255.224
+ standby 1 ip 192.168.60.1
+ standby 1 priority 110
+ standby 1 preempt
+ no shutdown
+exit
+
+interface vlan 99
+ ip address 192.168.99.2 255.255.255.252
+ no shutdown
+exit
+
+interface vlan 100
+ ip address 192.168.100.2 255.255.255.248
+ standby 1 ip 192.168.100.1
+ standby 1 priority 110
+ standby 1 preempt
+ no shutdown
+exit
+
+end
+write memory
+```
+
+### CORE-SW-B (priority 90 — standby):
+```
+configure terminal
+
+ip routing
+
+interface vlan 10
+ ip address 192.168.10.3 255.255.255.192
+ standby 1 ip 192.168.10.1
+ standby 1 priority 90
+ standby 1 preempt
+ no shutdown
+exit
+
+interface vlan 20
+ ip address 192.168.20.3 255.255.255.192
+ standby 1 ip 192.168.20.1
+ standby 1 priority 90
+ standby 1 preempt
+ no shutdown
+exit
+
+interface vlan 30
+ ip address 192.168.30.3 255.255.255.224
+ standby 1 ip 192.168.30.1
+ standby 1 priority 90
+ standby 1 preempt
+ no shutdown
+exit
+
+interface vlan 40
+ ip address 192.168.40.3 255.255.255.240
+ standby 1 ip 192.168.40.1
+ standby 1 priority 90
+ standby 1 preempt
+ no shutdown
+exit
+
+interface vlan 50
+ ip address 192.168.50.3 255.255.255.192
+ standby 1 ip 192.168.50.1
+ standby 1 priority 90
+ standby 1 preempt
+ no shutdown
+exit
+
+interface vlan 60
+ ip address 192.168.60.3 255.255.255.224
+ standby 1 ip 192.168.60.1
+ standby 1 priority 90
+ standby 1 preempt
+ no shutdown
+exit
+
+interface vlan 100
+ ip address 192.168.100.3 255.255.255.248
+ standby 1 ip 192.168.100.1
+ standby 1 priority 90
+ standby 1 preempt
+ no shutdown
+exit
+
+end
+write memory
+``` 
+
+
 ---
