@@ -539,5 +539,94 @@ end
 write memory
 ``` 
 
-
 ---
+
+### OSPF 
+
+## CORE-SW-A:
+```
+configure terminal
+
+ip routing
+
+router ospf 1
+ router-id 1.1.1.1
+ network 192.168.10.0 0.0.0.63 area 0
+ network 192.168.20.0 0.0.0.63 area 0
+ network 192.168.30.0 0.0.0.31 area 0
+ network 192.168.40.0 0.0.0.15 area 0
+ network 192.168.50.0 0.0.0.63 area 0
+ network 192.168.60.0 0.0.0.31 area 0
+ network 192.168.100.0 0.0.0.7 area 0
+ network 192.168.2.0 0.0.0.3 area 0
+exit
+
+end
+write memory
+```
+## CORE-SW-B:
+```
+configure terminal
+
+router ospf 1
+ router-id 2.2.2.2
+ network 192.168.10.0 0.0.0.63 area 0
+ network 192.168.20.0 0.0.0.63 area 0
+ network 192.168.30.0 0.0.0.31 area 0
+ network 192.168.40.0 0.0.0.15 area 0
+ network 192.168.50.0 0.0.0.63 area 0
+ network 192.168.60.0 0.0.0.31 area 0
+ network 192.168.100.0 0.0.0.7 area 0
+ network 192.168.2.4 0.0.0.3 area 0
+exit
+
+end
+write memory
+```
+
+### DISTR-SW-1, DISTR-SW-2, DISTR-SW-3:
+```
+configure terminal
+
+ip routing
+
+router ospf 1
+ router-id 3.3.3.3 (PARA O 2 passa para 4.4.4.4 & Para o 3 passa para 5.5.5.5)
+ passive-interface default
+ no passive-interface GigabitEthernet1/0/X
+exit
+
+end
+write memory
+```
+### R0-SEDE
+```
+configure terminal
+
+router ospf 1
+ router-id 6.6.6.6
+ network 192.168.2.0 0.0.0.3 area 0
+ network 192.168.2.4 0.0.0.3 area 0
+ network 192.168.2.8 0.0.0.3 area 0
+ network 10.0.0.0 0.0.0.3 area 0
+exit
+
+end
+write memory
+```
+### R1-FILIAL
+```
+configure terminal
+
+router ospf 1
+ router-id 7.7.7.7
+ network 10.0.0.0 0.0.0.3 area 0
+ network 192.168.200.0 0.0.0.63 area 0
+ network 192.168.10.0 0.0.0.63 area 0
+ network 192.168.20.0 0.0.0.63 area 0
+ network 192.168.60.0 0.0.0.31 area 0
+exit
+
+end
+write memory
+```
