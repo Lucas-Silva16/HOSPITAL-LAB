@@ -1,5 +1,8 @@
 ![Cisco Packet Tracer](https://img.shields.io/badge/Cisco_Packet_Tracer-Network_Simulation-1BA0D7?style=for-the-badge&logo=cisco)
 
+<img width="1980" height="1080" alt="hospital-network-infrastructure" src="https://github.com/user-attachments/assets/11c74294-902c-4f14-8041-b5afa0ee91a6" />
+
+
 # HOSPITAL-LAB 
 ### Tabela de VLANs
 
@@ -628,5 +631,178 @@ router ospf 1
 exit
 
 end
+write memory
+```
+### DIA 5
+
+###  ASA 5505
+---
+```
+Interfaces:
+configure terminal
+
+interface Vlan1
+ nameif inside
+ security-level 100
+ ip address 192.168.2.10 255.255.255.252
+ no shutdown
+exit
+
+interface Vlan2
+ nameif outside
+ security-level 0
+ ip address 203.0.113.1 255.255.255.252
+ no shutdown
+exit
+
+interface Vlan3
+ no forward interface Vlan1
+ nameif dmz
+ security-level 50
+ ip address 192.168.100.1 255.255.255.248
+ no shutdown
+exit
+
+interface Ethernet0/0
+ switchport access vlan 2
+ no shutdown
+exit
+
+interface Ethernet0/1
+ switchport access vlan 1
+ no shutdown
+exit
+
+interface Ethernet0/2
+ switchport access vlan 3
+ no shutdown
+exit
+
+```
+### NAT 
+```
+object network INSIDE-NET
+ subnet 192.168.0.0 255.255.0.0
+ nat (inside,outside) dynamic interface
+exit
+
+object network SERVER-HTTP
+ host 192.168.100.2
+ nat (dmz,outside) static 203.0.113.2
+exit
+
+object network SERVER-EMAIL
+ host 192.168.100.3
+ nat (dmz,outside) static 203.0.113.3
+exit
+
+```
+### ACL:
+```
+access-list OUTSIDE-TO-DMZ extended permit tcp any host 203.0.113.2 eq 80
+access-list OUTSIDE-TO-DMZ extended permit tcp any host 203.0.113.2 eq 443
+access-list OUTSIDE-TO-DMZ extended permit tcp any host 203.0.113.3 eq 25
+access-list OUTSIDE-TO-DMZ extended permit tcp any host 203.0.113.3 eq 143
+access-group OUTSIDE-TO-DMZ in interface outside
+access-list OUTSIDE-TO-DMZ extended permit icmp any any
+
+
+access-list DMZ-TO-INSIDE extended deny ip 192.168.100.0 255.255.255.248 192.168.0.0 255.255.0.0
+access-list DMZ-TO-INSIDE extended permit ip any any
+access-group DMZ-TO-INSIDE in interface dmz
+
+```
+
+### DIA 6
+
+### SERVERS
+#### Todos os servers a configuracao correu bem, menos no DHCP
+``` 
+A falha global de DHCP na infraestrutura dividia-se em dois problemas arquiteturais distintos:
+
+Na Sede (Colisão L3): O Servidor DHCP físico estava configurado com o IP .40.3. Bateu em colisão porque esse IP pertencia à interface virtual do CORE-SW-B. Moveu-se o servidor para o IP .40.4, e posteriormente o resto dos servidores tambem subiram 1 e reconfigurou-se o vetor de reencaminhamento (DHCP Relay) nos dois Core Switches para apontar para a morada nova.
+
+Na Filial (Quebra de Encapsulamento): O Switch da Filial enviava os pedidos do PC com a etiqueta da VLAN 10, mas a porta do Router da Filial era uma interface física plana que rejeitava tráfego etiquetado. Converteu-se o Router da Filial num modelo Router-on-a-Stick (criando a sub-interface virtual .10)
+```
+
+```
+Passo 1: No Servidor DHCP Físico
+No separador Desktop -> IP Configuration
+
+IP Address: 192.168.40.4
+Subnet Mask: 255.255.255.240
+Default Gateway: 192.168.40.1 
+
+Em todos os Pools criados (VLAN 10, 20, 30, etc.), altererei o campo DNS Server para 192.168.40.5. (Tinha posto os IPS dos serves em conflito com os IPs das interfaces virtuais (SVIs) e o HSRP dos Core Switches (CORE-SW-A e CORE-SW-B)
+
+Criar o Pool da Filial: Pool Name POOL_FILIAL | Gateway 192.168.200.1 | DNS 192.168.40.5 | Start IP 192.168.200.10 | Subnet Mask 255.255.255.192 | Max Users 53. 
+```
+--- 
+
+### Na CLI dos Core Switches
+```
+configure terminal
+
+interface vlan 10
+ no ip helper-address 192.168.40.3
+ ip helper-address 192.168.40.4
+
+interface vlan 20
+ no ip helper-address 192.168.40.3
+ ip helper-address 192.168.40.4
+
+interface vlan 30
+ no ip helper-address 192.168.40.3
+ ip helper-address 192.168.40.4
+
+interface vlan 50
+ no ip helper-address 192.168.40.3
+ ip helper-address 192.168.40.4
+
+interface vlan 60
+ no ip helper-address 192.168.40.3
+ ip helper-address 192.168.40.4
+
+exit
+write memory
+```
+---
+
+### Na CLI do Router
+
+```
+configure terminal
+
+interface GigabitEthernet0/0/0
+ no ip helper-address 192.168.40.4
+ no ip address
+ no shutdown
+exit
+
+interface GigabitEthernet0/0/0.10
+ encapsulation dot1Q 10
+ ip address 192.168.200.1 255.255.255.192
+ ip helper-address 192.168.40.4
+ no shutdown
+exit
+
+write memory
+
+```
+---
+### Na CLI do Switch (SW-FILIAL)
+```
+configure terminal
+
+interface FastEthernet0/1
+ switchport mode trunk
+ switchport trunk allowed vlan 10
+exit
+
+interface range fa0/2-3
+ switchport mode access
+ switchport access vlan 10
+exit
+
 write memory
 ```
