@@ -12,6 +12,8 @@ Após a conclusão do curso de Network Technician da Cisco, desenvolvi este labo
 
 Mais do que a simples configuração dos equipamentos, o maior desafio e aprendizagem deste projeto esteve no troubleshooting ativo. Resolver problemas reais de encapsulamento, bloqueios de Spanning Tree e permissões de Firewall consolidou a minha capacidade de analisar, diagnosticar e gerir redes complexas.
 
+Para manter a clareza e concisão deste relatório, os blocos de configuração e os comandos de verificação aqui documentados servem como exemplos representativos da lógica arquitetónica aplicada. Funcionalidades como o DHCP Snooping, o encaminhamento OSPF ou o Port Security foram aplicadas globalmente a todos os equipamentos das respetivas camadas (Distribuição, Core e Acesso), embora apenas um dispositivo exemplar esteja aqui detalhado para evitar redundância extrema. O ficheiro original do Packet Tracer contém a configuração integral de todos os nós da rede.
+
 ---
 
 ## Índice
